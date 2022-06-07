@@ -1,10 +1,7 @@
 import { Module } from "@nestjs/common";
-import { AppController } from "./app.controller";
-import { AppService } from "./app.service";
+import { StudyRoomModule } from "@src/study-room/study-room.module";
 
 @Module({
-    imports: [],
-    controllers: [AppController],
-    providers: [AppService]
+    imports: [StudyRoomModule]
 })
 export class AppModule {}
