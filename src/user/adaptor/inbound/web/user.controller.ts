@@ -1,6 +1,6 @@
 import { Body, Controller, Inject, Post } from "@nestjs/common";
 import { SignUpUserUseCase, SignUpUserUseCaseToken } from "@src/user/application/port/inbound/signup-user.usecase";
-import { SignUpUserRequest } from "@src/user/application/port/inbound/dto/signup-user.request";
+import { SignUpUserRequest } from "@src/user/application/port/inbound/dto/request/signup-user.request";
 
 @Controller("/user")
 export class UserController {
