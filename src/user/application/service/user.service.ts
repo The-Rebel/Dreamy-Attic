@@ -52,8 +52,6 @@ export class UserService implements SignUpUserUseCase, SignInUserUseCase {
             }
         );
 
-        return new IssueTokenResponse()
-            .setAccessToken(accessToken)
-            .build();
+        return new IssueTokenResponse().setAccessToken(accessToken).build();
     }
 }
