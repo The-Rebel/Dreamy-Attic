@@ -41,9 +41,7 @@ export class UserService implements SignUpUserUseCase, SignInUserUseCase {
             throw new Error("password not matched");
         }
 
-        const response: IssueTokenResponse = new IssueTokenResponse();
-
-        response.accessToken = this.jwtService.sign(
+        const accessToken: string = this.jwtService.sign(
             {
                 sub: user.id
             },
@@ -53,6 +51,8 @@ export class UserService implements SignUpUserUseCase, SignInUserUseCase {
             }
         );
 
-        return response;
+        return new IssueTokenResponse()
+            .setAccessToken(accessToken)
+            .build();
     }
 }
