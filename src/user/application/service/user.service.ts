@@ -10,6 +10,7 @@ import * as bcrypt from "bcrypt";
 import { JwtService } from "@nestjs/jwt";
 import { IssueTokenResponse } from "@src/user/application/port/inbound/dto/response/issue-token.response";
 import { ConfigService } from "@nestjs/config";
+import { JWT_SECRET_KEY } from "@src/global/environment/constants";
 
 @Injectable()
 export class UserService implements SignUpUserUseCase, SignInUserUseCase {
@@ -47,7 +48,7 @@ export class UserService implements SignUpUserUseCase, SignInUserUseCase {
             },
             {
                 expiresIn: "2h",
-                secret: this.configService.get("JWT_SECRET_KEY")
+                secret: this.configService.get(JWT_SECRET_KEY)
             }
         );
 
