@@ -1,4 +1,4 @@
-import { Inject, Injectable, UnauthorizedException } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { SignUpUserUseCase } from "@src/user/application/port/inbound/signup-user.usecase";
 import { SignUpUserRequest } from "@src/user/application/port/inbound/dto/request/signup-user.request";
 import { User } from "@src/user/domain/user";
@@ -6,11 +6,12 @@ import { SaveUserPort, SaveUserPortToken } from "@src/user/application/port/outb
 import { SignInUserUseCase } from "@src/user/application/port/inbound/signin-user.usecase";
 import { SignInUserRequest } from "@src/user/application/port/inbound/dto/request/signin-user.request";
 import { FindByUserNamePort, FindByUserNamePortToken } from "@src/user/application/port/outbound/find-by-username.port";
-import * as bcrypt from "bcrypt";
 import { JwtService } from "@nestjs/jwt";
 import { IssueTokenResponse } from "@src/user/application/port/inbound/dto/response/issue-token.response";
 import { ConfigService } from "@nestjs/config";
 import { JWT_SECRET_KEY } from "@src/global/environment/constants";
+import * as bcrypt from "bcrypt";
+import { NotMatchedPasswordException } from "@src/user/exception";
 
 @Injectable()
 export class UserService implements SignUpUserUseCase, SignInUserUseCase {
@@ -39,7 +40,7 @@ export class UserService implements SignUpUserUseCase, SignInUserUseCase {
         const user: User = await this.findByUserNamePort.findByUserName(request.username);
 
         if (!(await bcrypt.compare(request.password, user.password))) {
-            throw new UnauthorizedException("Not Matched Password");
+            throw NotMatchedPasswordException;
         }
 
         const accessToken: string = this.jwtService.sign(

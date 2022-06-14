@@ -1,7 +1,8 @@
 import { SaveUserPort } from "@src/user/application/port/outbound/save-user.port";
 import { User } from "@src/user/domain/user";
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { FindByUserNamePort } from "@src/user/application/port/outbound/find-by-username.port";
+import { UserNotFoundException } from "@src/user/exception";
 
 @Injectable()
 export class UserMemoryAdaptor implements SaveUserPort, FindByUserNamePort {
@@ -16,7 +17,7 @@ export class UserMemoryAdaptor implements SaveUserPort, FindByUserNamePort {
     async findByUserName(username: string): Promise<User> {
         const user: User = UserMemoryAdaptor.users.filter(u => u.username === username)[0];
         if (!user) {
-            throw new NotFoundException("User Not Found");
+            throw UserNotFoundException;
         }
         return user;
     }
