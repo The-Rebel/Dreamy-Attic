@@ -11,11 +11,15 @@ import { IssueTokenResponse } from "@src/user/application/port/inbound/dto/respo
 import { ConfigService } from "@nestjs/config";
 import { JWT_SECRET_KEY } from "@src/global/environment/constants";
 import * as bcrypt from "bcrypt";
-import { NotMatchedPasswordException } from "@src/user/exception";
+import { ConflictUserNameException, NotMatchedPasswordException } from "@src/user/exception";
+import { ExistsByUserNamePort, ExistsByUserNamePortToken } from "@src/user/application/port/outbound/exists-by-username.port";
 
 @Injectable()
 export class UserService implements SignUpUserUseCase, SignInUserUseCase {
     constructor(
+        @Inject(ExistsByUserNamePortToken)
+        private readonly existsByUserNamePort: ExistsByUserNamePort,
+
         @Inject(SaveUserPortToken)
         private readonly saveUserPort: SaveUserPort,
 
@@ -27,6 +31,10 @@ export class UserService implements SignUpUserUseCase, SignInUserUseCase {
     ) {}
 
     async signUpUser(request: SignUpUserRequest): Promise<void> {
+        if(await this.existsByUserNamePort.existsByUserName(request.username)) {
+            throw ConflictUserNameException;
+        }
+
         const user: User = new User({
             email: request.email,
             username: request.username,
