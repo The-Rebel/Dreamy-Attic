@@ -1,4 +1,4 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { Inject, Injectable, UnauthorizedException } from "@nestjs/common";
 import { SignUpUserUseCase } from "@src/user/application/port/inbound/signup-user.usecase";
 import { SignUpUserRequest } from "@src/user/application/port/inbound/dto/request/signup-user.request";
 import { User } from "@src/user/domain/user";
@@ -39,7 +39,7 @@ export class UserService implements SignUpUserUseCase, SignInUserUseCase {
         const user: User = await this.findByUserNamePort.findByUserName(request.username);
 
         if (!(await bcrypt.compare(request.password, user.password))) {
-            throw new Error("password not matched");
+            throw new UnauthorizedException("Not Matched Password");
         }
 
         const accessToken: string = this.jwtService.sign(
