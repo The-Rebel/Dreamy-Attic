@@ -6,15 +6,20 @@ import { SaveUserPort, SaveUserPortToken } from "@src/user/application/port/outb
 import { SignInUserUseCase } from "@src/user/application/port/inbound/signin-user.usecase";
 import { SignInUserRequest } from "@src/user/application/port/inbound/dto/request/signin-user.request";
 import { FindByUserNamePort, FindByUserNamePortToken } from "@src/user/application/port/outbound/find-by-username.port";
-import * as bcrypt from "bcrypt";
 import { JwtService } from "@nestjs/jwt";
 import { IssueTokenResponse } from "@src/user/application/port/inbound/dto/response/issue-token.response";
 import { ConfigService } from "@nestjs/config";
 import { JWT_SECRET_KEY } from "@src/global/environment/constants";
+import * as bcrypt from "bcrypt";
+import { ConflictUserNameException, NotMatchedPasswordException } from "@src/user/exception";
+import { ExistsByUserNamePort, ExistsByUserNamePortToken } from "@src/user/application/port/outbound/exists-by-username.port";
 
 @Injectable()
 export class UserService implements SignUpUserUseCase, SignInUserUseCase {
     constructor(
+        @Inject(ExistsByUserNamePortToken)
+        private readonly existsByUserNamePort: ExistsByUserNamePort,
+
         @Inject(SaveUserPortToken)
         private readonly saveUserPort: SaveUserPort,
 
@@ -26,6 +31,10 @@ export class UserService implements SignUpUserUseCase, SignInUserUseCase {
     ) {}
 
     async signUpUser(request: SignUpUserRequest): Promise<void> {
+        if(await this.existsByUserNamePort.existsByUserName(request.username)) {
+            throw ConflictUserNameException;
+        }
+
         const user: User = new User({
             email: request.email,
             username: request.username,
@@ -39,7 +48,7 @@ export class UserService implements SignUpUserUseCase, SignInUserUseCase {
         const user: User = await this.findByUserNamePort.findByUserName(request.username);
 
         if (!(await bcrypt.compare(request.password, user.password))) {
-            throw new Error("password not matched");
+            throw NotMatchedPasswordException;
         }
 
         const accessToken: string = this.jwtService.sign(
@@ -52,8 +61,6 @@ export class UserService implements SignUpUserUseCase, SignInUserUseCase {
             }
         );
 
-        return new IssueTokenResponse()
-            .setAccessToken(accessToken)
-            .build();
+        return new IssueTokenResponse().setAccessToken(accessToken).build();
     }
 }

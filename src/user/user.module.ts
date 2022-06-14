@@ -8,6 +8,7 @@ import { JwtModule } from "@nestjs/jwt";
 import { JwtStrategy } from "@src/global/passport-jwt/jwt.strategy";
 import { SignInUserUseCaseToken } from "@src/user/application/port/inbound/signin-user.usecase";
 import { FindByUserNamePortToken } from "@src/user/application/port/outbound/find-by-username.port";
+import { ExistsByUserNamePortToken } from "@src/user/application/port/outbound/exists-by-username.port";
 
 @Module({
     imports: [JwtModule.register({})],
@@ -17,6 +18,10 @@ import { FindByUserNamePortToken } from "@src/user/application/port/outbound/fin
         UserService,
         {
             provide: SaveUserPortToken,
+            useClass: UserMemoryAdaptor
+        },
+        {
+            provide: ExistsByUserNamePortToken,
             useClass: UserMemoryAdaptor
         },
         {
