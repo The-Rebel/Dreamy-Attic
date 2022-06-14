@@ -9,6 +9,9 @@ import { JwtStrategy } from "@src/global/passport-jwt/jwt.strategy";
 import { SignInUserUseCaseToken } from "@src/user/application/port/inbound/signin-user.usecase";
 import { FindByUserNamePortToken } from "@src/user/application/port/outbound/find-by-username.port";
 import { ExistsByUserNamePortToken } from "@src/user/application/port/outbound/exists-by-username.port";
+import { UserService } from "@src/user/application/service/user.service";
+import { FindByIdPortToken } from "@src/user/application/port/outbound/find-by-id.port";
+import { GetUserInformationUseCaseToken } from "@src/user/application/port/inbound/get-user-information.usecase";
 
 @Module({
     imports: [JwtModule.register({})],
@@ -16,6 +19,7 @@ import { ExistsByUserNamePortToken } from "@src/user/application/port/outbound/e
     providers: [
         UserMemoryAdaptor,
         UserAuthService,
+        UserService,
         {
             provide: SaveUserPortToken,
             useClass: UserMemoryAdaptor
@@ -35,6 +39,14 @@ import { ExistsByUserNamePortToken } from "@src/user/application/port/outbound/e
         {
             provide: SignInUserUseCaseToken,
             useClass: UserAuthService
+        },
+        {
+            provide: FindByIdPortToken,
+            useClass: UserMemoryAdaptor
+        },
+        {
+            provide: GetUserInformationUseCaseToken,
+            useClass: UserService
         },
         JwtStrategy
     ]

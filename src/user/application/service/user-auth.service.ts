@@ -31,7 +31,7 @@ export class UserAuthService implements SignUpUserUseCase, SignInUserUseCase {
     ) {}
 
     async signUpUser(request: SignUpUserRequest): Promise<void> {
-        if(await this.existsByUserNamePort.existsByUserName(request.username)) {
+        if (await this.existsByUserNamePort.existsByUserName(request.username)) {
             throw ConflictUserNameException;
         }
 
