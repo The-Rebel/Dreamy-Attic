@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { UserController } from "@src/user/adaptor/inbound/web/user.controller";
 import { UserMemoryAdaptor } from "@src/user/adaptor/outbound/memory/user-memory.adaptor";
-import { UserService } from "@src/user/application/service/user.service";
+import { UserAuthService } from "@src/user/application/service/user-auth.service";
 import { SignUpUserUseCaseToken } from "@src/user/application/port/inbound/signup-user.usecase";
 import { SaveUserPortToken } from "@src/user/application/port/outbound/save-user.port";
 import { JwtModule } from "@nestjs/jwt";
@@ -15,7 +15,7 @@ import { ExistsByUserNamePortToken } from "@src/user/application/port/outbound/e
     controllers: [UserController],
     providers: [
         UserMemoryAdaptor,
-        UserService,
+        UserAuthService,
         {
             provide: SaveUserPortToken,
             useClass: UserMemoryAdaptor
@@ -26,7 +26,7 @@ import { ExistsByUserNamePortToken } from "@src/user/application/port/outbound/e
         },
         {
             provide: SignUpUserUseCaseToken,
-            useClass: UserService
+            useClass: UserAuthService
         },
         {
             provide: FindByUserNamePortToken,
@@ -34,7 +34,7 @@ import { ExistsByUserNamePortToken } from "@src/user/application/port/outbound/e
         },
         {
             provide: SignInUserUseCaseToken,
-            useClass: UserService
+            useClass: UserAuthService
         },
         JwtStrategy
     ]

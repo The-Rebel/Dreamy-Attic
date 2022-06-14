@@ -15,7 +15,7 @@ import { ConflictUserNameException, NotMatchedPasswordException } from "@src/use
 import { ExistsByUserNamePort, ExistsByUserNamePortToken } from "@src/user/application/port/outbound/exists-by-username.port";
 
 @Injectable()
-export class UserService implements SignUpUserUseCase, SignInUserUseCase {
+export class UserAuthService implements SignUpUserUseCase, SignInUserUseCase {
     constructor(
         @Inject(ExistsByUserNamePortToken)
         private readonly existsByUserNamePort: ExistsByUserNamePort,
