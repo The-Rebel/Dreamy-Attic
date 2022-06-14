@@ -22,31 +22,31 @@ import { GetUserInformationUseCaseToken } from "@src/user/application/port/inbou
         UserService,
         {
             provide: SaveUserPortToken,
-            useClass: UserMemoryAdaptor
+            useExisting: UserMemoryAdaptor
         },
         {
             provide: ExistsByUserNamePortToken,
-            useClass: UserMemoryAdaptor
+            useExisting: UserMemoryAdaptor
         },
         {
             provide: SignUpUserUseCaseToken,
-            useClass: UserAuthService
+            useExisting: UserAuthService
         },
         {
             provide: FindByUserNamePortToken,
-            useClass: UserMemoryAdaptor
+            useExisting: UserMemoryAdaptor
         },
         {
             provide: SignInUserUseCaseToken,
-            useClass: UserAuthService
+            useExisting: UserAuthService
         },
         {
             provide: FindByIdPortToken,
-            useClass: UserMemoryAdaptor
+            useExisting: UserMemoryAdaptor
         },
         {
             provide: GetUserInformationUseCaseToken,
-            useClass: UserService
+            useExisting: UserService
         },
         JwtStrategy
     ]

@@ -12,11 +12,11 @@ import { StudyRoomController } from "@src/study-room/adaptor/inbound/web/study-r
         StudyRoomService,
         {
             provide: SaveStudyRoomPortToken,
-            useClass: StudyRoomMemoryAdaptor
+            useExisting: StudyRoomMemoryAdaptor
         },
         {
             provide: CreateStudyRoomUseCaseToken,
-            useClass: StudyRoomService
+            useExisting: StudyRoomService
         }
     ]
 })

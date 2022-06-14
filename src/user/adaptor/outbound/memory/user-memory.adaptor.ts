@@ -8,16 +8,16 @@ import { FindByIdPort } from "@src/user/application/port/outbound/find-by-id.por
 
 @Injectable()
 export class UserMemoryAdaptor implements SaveUserPort, FindByUserNamePort, ExistsByUserNamePort, FindByIdPort {
-    private static readonly users: User[] = [];
-    private static lastIndex: number = 0;
+    private readonly users: User[] = [];
+    private lastIndex: number = 0;
 
     async saveUser(user: User): Promise<void> {
-        user.id = ++UserMemoryAdaptor.lastIndex;
-        UserMemoryAdaptor.users.push(user);
+        user.id = ++this.lastIndex;
+        this.users.push(user);
     }
 
     async findByUserName(username: string): Promise<User> {
-        const user: User = UserMemoryAdaptor.users.filter(u => u.username === username)[0];
+        const user: User = this.users.filter(u => u.username === username)[0];
         if (!user) {
             throw UserNotFoundException;
         }
@@ -25,11 +25,11 @@ export class UserMemoryAdaptor implements SaveUserPort, FindByUserNamePort, Exis
     }
 
     async existsByUserName(username: string): Promise<boolean> {
-        return UserMemoryAdaptor.users.filter(u => u.username === username).length > 0;
+        return this.users.filter(u => u.username === username).length > 0;
     }
 
     async findById(id: number): Promise<User> {
-        const user: User = UserMemoryAdaptor.users.filter(u => u.id === id)[0];
+        const user: User = this.users.filter(u => u.id === id)[0];
         if (!user) {
             throw UserNotFoundException;
         }
