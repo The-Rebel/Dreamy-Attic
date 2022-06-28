@@ -11,7 +11,7 @@ export class StudyRoomService implements CreateStudyRoomUseCase {
         private readonly saveStudyRoomPort: SaveStudyRoomPort
     ) {}
 
-    async createStudyRoom(request: CreateStudyRoomRequest) {
+    async createStudyRoom(request: CreateStudyRoomRequest): Promise<void> {
         const studyRoom: StudyRoom = new StudyRoom({
             thumbnail: request.thumbnail,
             name: request.name,

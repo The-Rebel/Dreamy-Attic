@@ -3,7 +3,7 @@ import { Response } from "express";
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
-    catch(exception: HttpException, host: ArgumentsHost) {
+    catch(exception: HttpException, host: ArgumentsHost): void {
         const ctx = host.switchToHttp();
         const response: Response = ctx.getResponse<Response>();
         const request = ctx.getRequest<Request>();

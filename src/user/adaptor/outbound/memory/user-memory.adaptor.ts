@@ -9,7 +9,7 @@ import { FindByIdPort } from "@src/user/application/port/outbound/find-by-id.por
 @Injectable()
 export class UserMemoryAdaptor implements SaveUserPort, FindByUserNamePort, ExistsByUserNamePort, FindByIdPort {
     private readonly users: User[] = [];
-    private lastIndex: number = 0;
+    private lastIndex = 0;
 
     async saveUser(user: User): Promise<void> {
         user.id = ++this.lastIndex;

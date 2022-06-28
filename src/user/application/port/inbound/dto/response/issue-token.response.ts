@@ -13,7 +13,7 @@ export class IssueTokenResponse {
         return this;
     }
 
-    build() {
+    build(): IssueTokenResponse {
         return this;
     }
 }

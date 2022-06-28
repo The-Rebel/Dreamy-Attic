@@ -12,7 +12,7 @@ export class StudyRoomController {
 
     @UseGuards(AuthGuard("jwt"))
     @Post()
-    async studyRoom(@Body() request: CreateStudyRoomRequest) {
+    async studyRoom(@Body() request: CreateStudyRoomRequest): Promise<void> {
         await this.createStudyRoomUseCase.createStudyRoom(request);
     }
 }

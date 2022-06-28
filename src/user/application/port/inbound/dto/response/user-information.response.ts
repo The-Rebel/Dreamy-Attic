@@ -26,7 +26,7 @@ export class UserInformationResponse {
         return this;
     }
 
-    build() {
+    build(): UserInformationResponse {
         return this;
     }
 }
