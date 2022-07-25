@@ -6,6 +6,8 @@ import { CreateStudyRoomUseCaseToken } from "@src/study-room/application/port/in
 import { StudyRoomController } from "@src/study-room/adaptor/inbound/web/study-room.controller";
 import { GetStudyRoomListUseCaseToken } from "@src/study-room/application/port/inbound/get-study-room-list.usecase";
 import { FindAllPortToken } from "@src/study-room/application/port/outbound/find-all.port";
+import { GetStudyRoomInformationToken } from "@src/study-room/application/port/inbound/get-study-room-information.usecase";
+import { FindByIdPortToken } from "@src/study-room/application/port/outbound/find-by-id.port";
 
 @Module({
     controllers: [StudyRoomController],
@@ -21,11 +23,19 @@ import { FindAllPortToken } from "@src/study-room/application/port/outbound/find
             useExisting: StudyRoomMemoryAdaptor
         },
         {
+            provide: FindByIdPortToken,
+            useExisting: StudyRoomMemoryAdaptor
+        },
+        {
             provide: CreateStudyRoomUseCaseToken,
             useExisting: StudyRoomService
         },
         {
             provide: GetStudyRoomListUseCaseToken,
+            useExisting: StudyRoomService
+        },
+        {
+            provide: GetStudyRoomInformationToken,
             useExisting: StudyRoomService
         }
     ]
