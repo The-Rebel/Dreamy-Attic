@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Inject, Param, Post, UseGuards } from "@nestjs/common";
 import { CreateStudyRoomUseCase, CreateStudyRoomUseCaseToken } from "@src/study-room/application/port/inbound/create-study-room.usecase";
 import { CreateStudyRoomRequest } from "@src/study-room/application/port/inbound/dto/request/create-study-room.request";
 import { AuthGuard } from "@nestjs/passport";
@@ -7,6 +7,11 @@ import {
     GetStudyRoomListUseCaseToken
 } from "@src/study-room/application/port/inbound/get-study-room-list.usecase";
 import { GetStudyRoomListResponse } from "@src/study-room/application/port/inbound/dto/response/get-study-room-list.response";
+import { GetStudyRoomInformationResponse } from "@src/study-room/application/port/inbound/dto/response/get-study-room-information.response";
+import {
+    GetStudyRoomInformationToken,
+    GetStudyRoomInformationUseCase
+} from "@src/study-room/application/port/inbound/get-study-room-information.usecase";
 
 @Controller("study-room")
 export class StudyRoomController {
@@ -15,7 +20,10 @@ export class StudyRoomController {
         private readonly createStudyRoomUseCase: CreateStudyRoomUseCase,
 
         @Inject(GetStudyRoomListUseCaseToken)
-        private readonly getStudyRoomListUseCase: GetStudyRoomListUseCase
+        private readonly getStudyRoomListUseCase: GetStudyRoomListUseCase,
+
+        @Inject(GetStudyRoomInformationToken)
+        private readonly getStudyRoomInformationUseCase: GetStudyRoomInformationUseCase
     ) {}
 
     @UseGuards(AuthGuard("jwt"))
@@ -28,5 +36,11 @@ export class StudyRoomController {
     @Get()
     studyRoomList(): Promise<GetStudyRoomListResponse> {
         return this.getStudyRoomListUseCase.getStudyRoomList();
+    }
+
+    @UseGuards(AuthGuard("jwt"))
+    @Get("/:studyRoomId")
+    studyRoomInformation(@Param("studyRoomId") studyRoomId: number): Promise<GetStudyRoomInformationResponse> {
+        return this.getStudyRoomInformationUseCase.getStudyRoomInformation(studyRoomId);
     }
 }
